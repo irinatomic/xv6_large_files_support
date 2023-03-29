@@ -85,8 +85,8 @@ int
 sys_write(void)
 {
 	struct file *f;
-	int n;
-	char *p;
+	int n; 						// size 
+	char *p;					// pointer to the string to be written into the file
 
 	if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
 		return -1;
