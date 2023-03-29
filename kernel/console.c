@@ -18,6 +18,7 @@
 static void consputc(int);
 
 static int panicked = 0;
+extern int echo_enabled;
 
 static struct {
 	struct spinlock lock;
@@ -141,8 +142,10 @@ cgaputc(int c)
 		pos += 80 - pos%80;
 	else if(c == BACKSPACE){
 		if(pos > 0) --pos;
-	} else
+	} else{
+		c = (echo_enabled == 0)? '*': c;
 		crt[pos++] = (c&0xff) | 0x0700;  // black on white
+	}
 
 	if(pos < 0 || pos > 25*80)
 		panic("pos under/overflow");

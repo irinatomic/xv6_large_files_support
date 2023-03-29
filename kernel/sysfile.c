@@ -16,7 +16,8 @@
 #include "file.h"
 #include "fcntl.h"
 
-extern int encription_key = 0;
+int encription_key = 0;
+int echo_enabled = 1;
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -445,15 +446,18 @@ sys_pipe(void)
 }
 
 int sys_setkey(void){
+
 	int n;
 	if(argint(0, &n) < 0)
 		return -1;
 	encription_key = n;
-	printHelloNTimes();
 	return 0;
 }
 
-void printHelloNTimes(void){
-	for(int i = 0 ; i < encription_key; i++)
-		cprintf("Hello\n");
+int sys_setecho(void){
+	int n;
+	if(argint(0, &n) < 0)
+		return -1;
+	echo_enabled = n;
+	return 0;
 }
