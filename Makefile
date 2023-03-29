@@ -212,6 +212,7 @@ UPROGS=\
 	$U/_wc\
 	$U/_zombie\
 	$U/_setkey\
+	$U/_blockwriter\
 
 fs.img: $T/mkfs README $(UPROGS)
 	$T/mkfs fs.img README $(UPROGS)

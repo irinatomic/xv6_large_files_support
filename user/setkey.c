@@ -1,7 +1,9 @@
 #include "user.h"
 #include "kernel/types.h"
 
-char help_meni[] = "--help (-h)    shows help meni\n--secret (-s)  set a key for encr/decr\n";
+char help_meni[] = 
+"--help (-h)    shows help meni\n\
+--secret (-s)  set a key for encr/decr\n";
 
 int main(int argc, char *argv[]){
 

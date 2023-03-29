@@ -360,6 +360,8 @@ iunlockput(struct inode *ip)
 
 // Inode content
 //
+// for logical block number finds a physical one
+//
 // The content (data) associated with each inode is stored
 // in blocks on the disk. The first NDIRECT block numbers
 // are listed in ip->addrs[].  The next NINDIRECT blocks are
@@ -381,15 +383,26 @@ bmap(struct inode *ip, uint bn)
 	bn -= NDIRECT;
 
 	if(bn < NINDIRECT){
-		// Load indirect block, allocating if necessary.
+		
+		// Load 1-indirect block, allocating if necessary.
 		if((addr = ip->addrs[NDIRECT]) == 0)
 			ip->addrs[NDIRECT] = addr = balloc(ip->dev);
+
 		bp = bread(ip->dev, addr);
 		a = (uint*)bp->data;
 		if((addr = a[bn]) == 0){
 			a[bn] = addr = balloc(ip->dev);
 			log_write(bp);
 		}
+
+		//Load 2-indirect block -> allocate if necessary
+		bp = bread(ip->dev, addr);
+    	a = (uint*)bp->data;
+		if((addr = a[bn%(NINDIRECT)]) == 0){
+			a[(bn%NINDIRECT)] = addr = balloc(ip->dev);
+			log_write(bp);
+		}
+
 		brelse(bp);
 		return addr;
 	}

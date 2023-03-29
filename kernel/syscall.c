@@ -105,6 +105,7 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_setkey(void);
 extern int sys_setecho(void);
+extern int sys_blockwriter(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
