@@ -3,9 +3,9 @@
 #include "kernel/fcntl.h"
 
 char help_meni[] = 
-"--help (-h)                         shows help meni\n\
---output-file (-o) FILENAME         sets the new file name to FILENAME\n\
---blocks (-b) BLOCKS                sets the size of the file in BLOCKS\n";
+"--help (-h)                     shows help meni\n\
+--output-file (-o) FILENAME     sets the new file name to FILENAME (long.txt)\n\
+--blocks (-b) BLOCKS            sets the size of the file in BLOCKS (150)\n";
 
 char str_for_file[512] = 
 "Ice cream is a frozen dessert, typically made from milk or cream and flavoured with a sweetener,\
@@ -17,15 +17,14 @@ char str_for_file[512] =
 
 int main(int argc, char *argv[]){
 
-    if(argc < 2)
-        fprintf(2, "Usage: create new big file up to 8.5MB (1 block = 512 bytes)\n");
-
     char *choice = argv[1];
     char *file_name = "long.txt";
     int size_blocks = 150;
 
-    if(strcmp(choice, "--help") == 0 || strcmp(choice, "-h") == 0)
+    if(argc < 2 || strcmp(choice, "--help") == 0 || strcmp(choice, "-h") == 0){
         fprintf(2, help_meni);
+        exit();
+    }
     
     // Get the user input for filename and block size
     for(int i = 1; i < argc; i += 2){

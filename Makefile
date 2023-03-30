@@ -26,6 +26,7 @@ HDRS = \
 	$K/types.h\
 	$K/x86.h\
 	$U/user.h\
+	$K/encription.h\
 
 OBJS = \
 	$K/bio.o\
@@ -56,6 +57,7 @@ OBJS = \
 	$K/uart.o\
 	$K/vectors.o\
 	$K/vm.o\
+	$K/encription.o\
 
 # Cross-compiling (e.g., on Mac OS X)
 # TOOLPREFIX := i386-elf-

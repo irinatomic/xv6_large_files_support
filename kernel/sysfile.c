@@ -15,6 +15,7 @@
 #include "sleeplock.h"
 #include "file.h"
 #include "fcntl.h"
+#include "encription.h"
 
 int encription_key = -1;
 int echo_enabled = 1;
@@ -73,11 +74,19 @@ int
 sys_read(void)
 {
 	struct file *f;
+	struct stat st;
 	int n;
 	char *p;
 
 	if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
 		return -1;
+
+	if(filestat(f, &st) < 0 )
+		return -1;
+	
+	if((f->ip)->major==1 && st.type == T_FILE)
+		decript(p);
+
 	return fileread(f, p, n);
 }
 
@@ -85,11 +94,19 @@ int
 sys_write(void)
 {
 	struct file *f;
+	struct stat st;
 	int n; 						// size 
 	char *p;					// pointer to the string to be written into the file
 
 	if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
 		return -1;
+
+	if(filestat(f, &st) < 0 )
+		return -1;
+	
+	if((f->ip)->major==1 && st.type == T_FILE)		
+		encript(p);
+
 	return filewrite(f, p, n);
 }
 
@@ -462,39 +479,35 @@ int sys_setecho(void){
 	return 0;
 }
 
-int encr_decr(int fd, struct file *f, int key){
-
-	argint(0, &fd);
-
-	char *buf = kalloc(); 									// Allocate memory for the buffer (for file content)
-	int n = fileread(f, buf, f->ip->size);
-
-	for (int i = 0; i < n; i++)
-    	buf[i] += key;
-	
-	if (filewrite(f, buf, n) != n) {
-    	kfree(buf);
-    	return -4;
-	}
-
-	kfree(buf);
-	return 0;
-}
-
 int sys_encr(void){
 
-	int fd;
-	argint(0, &fd);
-
-	struct proc *curproc = myproc();
-	struct file *f = dirlookup(curproc->ofile, fd);	
+	struct stat st;
+	struct file *f;
 
 	if(encription_key < 0)	
 		return -1;
-	if(argfd(0, 0, &fd) < 0)
+
+	cprintf("1");
+
+	if(argfd(0, 0, &f) < 0)			//get file -> unexpected check (-4)
+		return -4;
+
+	cprintf("2");
+
+	if(filestat(f, &st)<0)			// get stat -> unexpected check (-4)
+		return -4;
+
+	cprintf("3");
+
+	if(st.type==T_DIR)				// check if the file type is T_DIR
 		return -2;
+
 	if(f->ip->major == 1)
 		return -3;
-
-	return encr_decr(fd, f, encription_key);
+	
+	cprintf("4");
+	if(file_encr_decr(f, 1) < 0)
+		return -4;
+	
+	return 0;
 }
