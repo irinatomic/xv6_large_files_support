@@ -27,6 +27,7 @@ int sleep(int);
 int uptime(void);
 int setkey(int);
 int setecho(int);
+int encr(int);                          // sends int file_descriptor
 
 // ulib.c
 int stat(const char*, struct stat*);
@@ -44,3 +45,6 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
+
+// ls.c
+char* fmtname(char*);

@@ -52,7 +52,7 @@ struct dinode {
 #define DIRSIZ 14
 
 struct dirent {
-	ushort inum;
-	char name[DIRSIZ];
+	ushort inum;				// points to inode for this directory entity
+	char name[DIRSIZ];			// name of this directory entity
 };
 

@@ -16,7 +16,7 @@
 #include "file.h"
 #include "fcntl.h"
 
-int encription_key = 0;
+int encription_key = -1;
 int echo_enabled = 1;
 
 // Fetch the nth word-sized system call argument as a file descriptor
@@ -460,4 +460,41 @@ int sys_setecho(void){
 		return -1;
 	echo_enabled = n;
 	return 0;
+}
+
+int encr_decr(int fd, struct file *f, int key){
+
+	argint(0, &fd);
+
+	char *buf = kalloc(); 									// Allocate memory for the buffer (for file content)
+	int n = fileread(f, buf, f->ip->size);
+
+	for (int i = 0; i < n; i++)
+    	buf[i] += key;
+	
+	if (filewrite(f, buf, n) != n) {
+    	kfree(buf);
+    	return -4;
+	}
+
+	kfree(buf);
+	return 0;
+}
+
+int sys_encr(void){
+
+	int fd;
+	argint(0, &fd);
+
+	struct proc *curproc = myproc();
+	struct file *f = dirlookup(curproc->ofile, fd);	
+
+	if(encription_key < 0)	
+		return -1;
+	if(argfd(0, 0, &fd) < 0)
+		return -2;
+	if(f->ip->major == 1)
+		return -3;
+
+	return encr_decr(fd, f, encription_key);
 }
