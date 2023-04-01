@@ -7,7 +7,7 @@ char help_meni[] =
 --output-file (-o) FILENAME     sets the new file name to FILENAME (long.txt)\n\
 --blocks (-b) BLOCKS            sets the size of the file in BLOCKS (150)\n";
 
-char str_for_file_last_block[] = 
+char str_for_file[] = 
 "Ice cream is a frozen dessert, typically made from milk or cream and flavoured with a sweetener,\
  either sugar or an alternative, and a spice, such as cocoa or vanilla, or with fruit such as strawberries\
  or peaches. It can also be made by whisking a flavored cream base and liquid nitrogen together. Food\
@@ -52,9 +52,7 @@ int main(int argc, char *argv[]){
 
     int file_desc = open(file_name, 0x200|0x002);
     int i = 0;
-    while(i < size_blocks){
-        if(i == size_blocks)
-            
+    while(i < size_blocks){        
         int response = write(file_desc, str_for_file, 512);
         if(response != 512){
             fprintf(2, "Mistake while writing into the file %d\n", i);
