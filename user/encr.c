@@ -11,11 +11,11 @@ char help_meni[] =
 void format_response(int response){
     
     switch(response){
-        case -1: printf("encription key is not set"); break;
-        case -2: printf("cannot encrypt T_DEV"); break;
-        case -3: printf("file is already encrypted"); break;
-        case 0: printf("file successfully encrypted"); break;
-        default: printf("error in some helper function");
+        case -1: printf("encription key is not set\n"); break;
+        case -2: printf("cannot encrypt T_DEV\n"); break;
+        case -3: printf("file is already encrypted\n"); break;
+        case 0: printf("file successfully encrypted\n"); break;
+        default: printf("error in some helper function\n");
     }
 }
 
@@ -67,9 +67,14 @@ void encrypt_file(char* path){
 	if((fd = open(path, O_RDWR)) < 0)
 		fprintf(2, "encr: Failed to open\n");
 	
-	int response = encr(fd);            // calls the sys interrupt sys_encr
-    close(fd);
-    format_response(response);
+	encr(fd);
+	exit();
+	// int response = encr(fd);            // calls the sys interrupt sys_encr
+    // fprintf(2, " 16");
+	// close(fd);
+	// fprintf(2, " 17");
+    // format_response(response);
+	// fprintf(2, " 18");
 }
 
 int main(int argc, char *argv[]){

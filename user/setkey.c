@@ -7,8 +7,10 @@ char help_meni[] =
 
 int main(int argc, char *argv[]){
 
-    if(argc < 2)
-        fprintf(2, "Usage: set encr/decr key....\n");
+    if(argc < 2){
+        fprintf(2, help_meni);
+        exit();
+    }
 
     char *choice = argv[1];
 
