@@ -467,7 +467,7 @@ int sys_setkey(void){
 	int n;
 	if(argint(0, &n) < 0)
 		return -1;
-	encription_key = n;
+	encription_key = n % 128; 		// ascii table size is 128
 	return 0;
 }
 

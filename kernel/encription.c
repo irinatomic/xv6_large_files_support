@@ -11,7 +11,7 @@ void encript(char *buf){
 	uint i = 0;
 
 	while(*a != '\0'){
-		*a= (char) ((((int) *a) + encription_key) % 255);		// ascii table size is 255
+		*a= (char) ((((int) *a) + encription_key) % 128);		// ascii table size is 128
 		a++;
 		i++;
 	}
@@ -24,8 +24,8 @@ void decript(char *buf){
 	while(*a != '\0'){
 		int new_val = ((int) *a) - encription_key;
 		if(new_val < 0)
-			new_val += 255;
-		*a = (char) (new_val % 255);		
+			new_val += 128;
+		*a = (char) (new_val % 128);		
 		a++;
 		i++;
 	}
