@@ -23,3 +23,4 @@
 #define SYS_setkey      22
 #define SYS_setecho     23
 #define SYS_encr        24
+#define SYS_decr        25

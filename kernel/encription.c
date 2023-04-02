@@ -24,7 +24,7 @@ void decript(char *buf){
 	while(*a != '\0'){
 		int new_val = ((int) *a) - encription_key;
 		if(new_val < 0)
-			new_val += 256;
+			new_val += 255;
 		*a = (char) (new_val % 255);		
 		a++;
 		i++;

@@ -486,21 +486,39 @@ int sys_encr(void){
 
 	if(encription_key < 0)	
 		return -1;
-
 	if(argfd(0, 0, &f) < 0)			//get file -> unexpected check (-4)
 		return -4;
-
 	if(filestat(f, &st)<0)			// get stat -> unexpected check (-4)
 		return -4;
-
 	if(st.type==T_DIR)				// check if the file type is T_DIR
 		return -2;
-
 	if(f->ip->major == 1)
 		return -3;
-	
+
 	if(file_encr_decr(f, 1) < 0)
 		return -4;
-	
+
 	return 0;
+}
+
+int sys_decr(void){
+
+	struct stat st;
+	struct file *f;
+
+	if(encription_key < 0)	
+		return -1;
+	if(argfd(0, 0, &f) < 0)			//get file -> unexpected check (-4)
+		return -4;
+	if(filestat(f, &st)<0)			// get stat -> unexpected check (-4)
+		return -4;
+	if(st.type==T_DIR)				// check if the file type is T_DIR
+		return -2;
+	if(f->ip->major == 0)
+		return -3;
+
+	if(file_encr_decr(f, 0) < 0)
+		return -4;
+
+	return 0;	
 }
