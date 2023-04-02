@@ -68,6 +68,7 @@ void encrypt_file(char* path){
 		fprintf(2, "encr: Failed to open\n");
 	
 	encr(fd);
+	close(fd);
 	exit();
 	// int response = encr(fd);            // calls the sys interrupt sys_encr
     // fprintf(2, " 16");

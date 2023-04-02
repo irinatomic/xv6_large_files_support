@@ -487,17 +487,11 @@ int sys_encr(void){
 	if(encription_key < 0)	
 		return -1;
 
-	cprintf("1");
-
 	if(argfd(0, 0, &f) < 0)			//get file -> unexpected check (-4)
 		return -4;
 
-	cprintf("2");
-
 	if(filestat(f, &st)<0)			// get stat -> unexpected check (-4)
 		return -4;
-
-	cprintf("3");
 
 	if(st.type==T_DIR)				// check if the file type is T_DIR
 		return -2;
@@ -505,7 +499,6 @@ int sys_encr(void){
 	if(f->ip->major == 1)
 		return -3;
 	
-	cprintf("4");
 	if(file_encr_decr(f, 1) < 0)
 		return -4;
 	

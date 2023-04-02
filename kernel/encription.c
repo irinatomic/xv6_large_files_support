@@ -6,7 +6,7 @@
 #include "file.h"
 #include "encription.h"
 
-int encript(char *buf){
+void encript(char *buf){
 	char *a = buf;
 	uint i = 0;
 
@@ -15,10 +15,9 @@ int encript(char *buf){
 		a++;
 		i++;
 	}
-	return i;
 }
 
-int decript(char *buf){
+void decript(char *buf){
 	char *a = buf;
 	uint i = 0;
 	
@@ -30,7 +29,6 @@ int decript(char *buf){
 		a++;
 		i++;
 	}
-    return i;
 }
 
 int file_encr_decr(struct file *f, int encr){
@@ -40,32 +38,25 @@ int file_encr_decr(struct file *f, int encr){
 	
 	int r;
 	char buf[512];
-	uint re = f->off, wr = f->off;
 
-    cprintf("5");
+	int size = (int)f->ip->size;
+	int num_blocks = size / 512;
 
-	while((r = fileread(f, buf, sizeof(buf))) > 0){
+	for(int i = 0; i < num_blocks; i++){
+		r = fileread(f, buf, sizeof(buf));
 		if(encr == 1){
             encript(buf);
-        } else {
+         } else {
             decript(buf);
-        }
+         }
 
-        cprintf("6");
-		re = f->off;;
-		f->off = wr;
+		f->off = 512 * i;
 		if (filewrite(f, buf, r) != r) 
 			return -1;
-			
-        cprintf("7");
-		wr = f->off;
-		f->off = re;
 	}
 
-    cprintf("8");
-
     // transaction -> write block to disk
-	begin_op();					
+	begin_op();	
 	ilock(f->ip);
     if(encr){
 	    (f->ip)->major = 1;				// set the major flag to 1 (encripted)

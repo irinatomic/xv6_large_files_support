@@ -12,8 +12,7 @@ char str_for_file[] =
  either sugar or an alternative, and a spice, such as cocoa or vanilla, or with fruit such as strawberries\
  or peaches. It can also be made by whisking a flavored cream base and liquid nitrogen together. Food\
  coloring is sometimes added, in addition to stabilizers. The mixture is cooled below the freezing point\
- of water and stirred to incorporate air spaces and to prevent detectable ice crystals from forming. En";
-
+ of water and stirred to incorporate air spaces and to prevent detectable ice crystals from forming.\0";
 
 int main(int argc, char *argv[]){
 
@@ -52,7 +51,7 @@ int main(int argc, char *argv[]){
 
     int file_desc = open(file_name, 0x200|0x002);
     int i = 0;
-    while(i < size_blocks){        
+    while(i < size_blocks){   
         int response = write(file_desc, str_for_file, 512);
         if(response != 512){
             fprintf(2, "Mistake while writing into the file %d\n", i);
