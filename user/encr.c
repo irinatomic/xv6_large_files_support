@@ -11,11 +11,11 @@ char help_meni[] =
 void format_response(int response){
     
     switch(response){
-        case -1: printf("encription key is not set\n"); break;
-        case -2: printf("cannot encrypt T_DEV\n"); break;
-        case -3: printf("file is already encrypted\n"); break;
-        case 0: printf("file successfully encrypted\n"); break;
-        default: printf("error in some helper function\n");
+        case -1: fprintf(2, "encription key is not set\n"); break;
+        case -2: fprintf(2, "cannot encrypt T_DEV\n"); break;
+        case -3: fprintf(2, "file is already encrypted\n"); break;
+        case 0: fprintf(2, "file successfully encrypted\n"); break;
+        default: fprintf(2, "error in some helper function\n");
     }
 }
 
@@ -48,13 +48,13 @@ void encrypt_all_files(){
 		memmove(p, de.name, DIRSIZ);
 		p[DIRSIZ] = 0;
 		if(stat(buf, &st) < 0){
-			printf("encr: cannot stat\n");
+			fprintf(2, "encr: cannot stat\n");
 			continue;
 		}
 
+
         if(st.type == T_FILE){
-            int response = encrypt_file(buf);	
-            format_response(response);
+            encrypt_file(buf);				// do not want to print response so we don't stop the code execution
         }
 	}
 	
@@ -67,15 +67,8 @@ void encrypt_file(char* path){
 	if((fd = open(path, O_RDWR)) < 0)
 		fprintf(2, "encr: Failed to open\n");
 	
-	encr(fd);
+	encr(fd);				// calls the sys interrupt sys_encr
 	close(fd);
-	exit();
-	// int response = encr(fd);            // calls the sys interrupt sys_encr
-    // fprintf(2, " 16");
-	// close(fd);
-	// fprintf(2, " 17");
-    // format_response(response);
-	// fprintf(2, " 18");
 }
 
 int main(int argc, char *argv[]){
