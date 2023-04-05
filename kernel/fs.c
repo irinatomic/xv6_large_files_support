@@ -397,14 +397,14 @@ bmap(struct inode *ip, uint bn)
     return addr;
   }
 
-  bn -= NINDIRECT;														// bn is now index in the N2INDIRECT blocks
+  bn -= NINDIRECT;							// bn is now index in the N2INDIRECT blocks
   if(bn < N2INDIRECT){
     // Load double indirect block, allocating if necessary.
-    if((addr = ip->addrs[NDIRECT+1]) == 0)								// if the block hasn't been allocated yet, else -> allocate
+    if((addr = ip->addrs[NDIRECT+1]) == 0)				// if the block hasn't been allocated yet, else -> allocate
       	ip->addrs[NDIRECT+1] = addr = balloc(ip->dev);
-    bp = bread(ip->dev, addr);											// read indirect from block from the prev allocated address into buffer (cache)
-    a = (uint*)bp->data;												// a = pointer to block address
-    if((addr = a[bn/(BSIZE / sizeof(uint))]) == 0){						// index of block (0 = not allocated yet)
+    bp = bread(ip->dev, addr);						// read indirect from block from the prev allocated address into buffer (cache)
+    a = (uint*)bp->data;						// a = pointer to block address
+    if((addr = a[bn/(BSIZE / sizeof(uint))]) == 0){			// index of block (0 = not allocated yet)
      	a[bn/(BSIZE / sizeof(uint))] = addr = balloc(ip->dev);
       	log_write(bp);
     }
@@ -447,24 +447,24 @@ itrunc(struct inode *ip)
 	}
 
 	// DOUBLE INDIRECT BLOCKS
-	if(ip->addrs[NDIRECT]){								// check if there is a double indirect block
+	if(ip->addrs[NDIRECT]){						// check if there is a double indirect block
 		bp = bread(ip->dev, ip->addrs[NDIRECT]);		// read block to buffer
 		a = (uint*)bp->data;
-		for(i = 0; i < NINDIRECT; i++){					// go through 2nd layer
-			if(a[i]){									// indirect blocks from 3rd layer pointed to by a[i] must be freed first
+		for(i = 0; i < NINDIRECT; i++){				// go through 2nd layer
+			if(a[i]){					// indirect blocks from 3rd layer pointed to by a[i] must be freed first
 				bp2 = bread(ip->dev, a[i]);
 				a2 = (uint*)bp2->data;
-				for(int j = 0; j < NINDIRECT; j++){		// go through the 3rd layer
-					if(a2[j])							// if exists -> free block from 3rd layer
+				for(int j = 0; j < NINDIRECT; j++){	// go through the 3rd layer
+					if(a2[j])			// if exists -> free block from 3rd layer
 						bfree(ip->dev, a2[j]);
 				}
 				brelse(bp2);
-				bfree(ip->dev, a[i]);					//free indirect block from 2nd layer
+				bfree(ip->dev, a[i]);			//free indirect block from 2nd layer
 			}
 		}
 		brelse(bp);
 		bfree(ip->dev, ip->addrs[NDIRECT]);
-		ip->addrs[NDIRECT] = 0;							// set to zero = no longer in use				
+		ip->addrs[NDIRECT] = 0;					// set to zero = no longer in use				
   	}
 
 	ip->size = 0;
