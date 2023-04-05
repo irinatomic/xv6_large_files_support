@@ -58,8 +58,8 @@ int file_encr_decr(struct file *f, int encr){
     // transaction -> write block to disk
 	begin_op();	
 	ilock(f->ip);
-    if(encr){
-	    (f->ip)->major = 1;				// set the major flag to 1 (encripted)
+    if(encr == 1){
+	    (f->ip)->major = 5;				// set the major flag to 1 (encripted)
     } else{
         (f->ip)->major = 0;				// set the major flag to 0 (not encripted)
     }

@@ -83,11 +83,14 @@ sys_read(void)
 
 	if(filestat(f, &st) < 0 )
 		return -1;
-	
-	if((f->ip)->major==1 && st.type == T_FILE)
-		decript(p);
 
-	return fileread(f, p, n);
+	int count = fileread(f, p, n);
+
+	if((f->ip)->major == 5){
+		decript(p);
+	}
+
+	return count;
 }
 
 int
@@ -96,18 +99,21 @@ sys_write(void)
 	struct file *f;
 	struct stat st;
 	int n; 						// size 
-	char *p;					// pointer to the string to be written into the file
+	char *p;					// pointer to the string 
 
 	if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
 		return -1;
 
 	if(filestat(f, &st) < 0 )
 		return -1;
-	
-	if((f->ip)->major==1 && st.type == T_FILE)		
-		encript(p);
 
-	return filewrite(f, p, n);
+	int count = filewrite(f, p, n);
+
+	if((f->ip)->major == 5)	{	
+		encript(p);
+	}
+
+	return count;
 }
 
 int
